@@ -1,0 +1,25 @@
+{
+    "name": "ircmaxell/stauros",
+    "description": "A fast XSS cleaner for PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anthony Ferrara",
+            "email": "ircmaxell@gmail.com"
+        }
+    ],
+    "require": {
+        "php-64bit": ">=5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7",
+        "fabpot/php-cs-fixer": "1.*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Stauros\\": "lib/Stauros/"
+        }
+    }
+
+}
