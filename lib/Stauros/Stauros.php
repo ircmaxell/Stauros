@@ -15,8 +15,10 @@ class Stauros {
     private $htmlConfig;
 
     public function __construct(HTML\Config $htmlConfig = null) {
-        if ($config) {
+        if ($htmlConfig) {
             $this->htmlConfig = $htmlConfig;
+        } else {
+            $this->htmlConfig = new HTML\Config;
         }
     }
 
