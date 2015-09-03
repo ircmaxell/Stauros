@@ -1,0 +1,27 @@
+application: stauros-1056
+version: 1
+runtime: php55
+api_version: 1
+
+handlers:
+- url: /
+  static_files: public/index.html
+  upload: public/index.html
+
+- url: /demo
+  static_files: public/index.html
+  upload: public/index.html
+
+- url: /demo/(.*)
+  static_files: public/index.html
+  upload: public/index.html
+
+- url: /app.js
+  static_files: public/app.js
+  upload: public/app.js
+
+- url: /code/(.+)
+  script: public/api.php
+
+- url: /code-demo/
+  script: public/api.php

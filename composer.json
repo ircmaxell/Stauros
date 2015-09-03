@@ -1,6 +1,6 @@
 {
-    "name": "ircmaxell/stauros",
-    "description": "A fast XSS cleaner for PHP",
+    "name": "ircmaxell/stauros-website",
+    "description": "The website for Stauros",
     "license": "MIT",
     "authors": [
         {
@@ -10,17 +10,24 @@
     ],
     "require": {
         "php-64bit": ">=5.5",
-        "ezyang/htmlpurifier": "dev-master"
+        "nikic/fast-route": "dev-master",
+        "rdlowrey/auryn": "dev-master",
+        "tomwalder/php-gds": "dev-master",
+        "ircmaxell/random-lib": "^1.1@dev",
+        "ircmaxell/stauros": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.7",
         "fabpot/php-cs-fixer": "1.*"
     },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "Stauros\\": "lib/Stauros/"
-        }
+            "StaurosWeb\\": "lib/StaurosWeb/"
+        },
+        "files": [
+            "src/config.php",
+            "src/route_handlers.php"
+        ]
     }
 
 }
