@@ -1,10 +1,46 @@
 var Index = React.createClass({displayName: "Index",
     getInitialState: function() {
-        return {};
+        return {
+            "sample": "$stauros = new Stauros\\Stauros;\r\n$clean = $stauros->scanHTML($dirty);",
+            "sampleAttack": "<img src=\"javascript:alert('XSS');\">",
+            "sampleAttackOutput": "<img>"
+        };
     },
     render: function() {
         return (
-            React.createElement("div", null, "Stauros!")
+            React.createElement("div", {className: "panel panel-default"}, 
+                React.createElement("div", {className: "panel-body"}, 
+                    React.createElement("h1", null, "Stauros - A fast XSS sanitizer for PHP"), 
+                    React.createElement("div", {className: "panel panel-danger"}, 
+                        React.createElement("div", {className: "panel-heading"}, React.createElement("h3", {className: "panel-title"}, "Warning")), 
+                        React.createElement("div", {className: "panel-body"}, 
+                            React.createElement("h4", null, "Stauros is currently an experimental library. It is not recommended for production use.")
+                        )
+                    ), 
+                    React.createElement("div", {className: "panel panel-default"}, 
+                        React.createElement("div", {className: "panel-heading"}, React.createElement("h4", null, "Usage:")), 
+                        React.createElement("div", {className: "panel-body"}, 
+                            React.createElement("pre", null, 
+                                React.createElement("code", {className: "language-php"}, this.state.sample)
+                            )
+                        )
+                    ), 
+                    React.createElement("div", {className: "panel panel-default"}, 
+                        React.createElement("div", {className: "panel-heading"}, React.createElement("h4", null, "An Example Of Bad Input:")), 
+                        React.createElement("div", {className: "panel-body"}, 
+                            React.createElement("h5", null, "Original Input"), 
+                            React.createElement("pre", null, 
+                                React.createElement("code", {className: "language-html"}, this.state.sampleAttack)
+                            ), 
+                            React.createElement("h5", null, "Cleaned Output"), 
+                            React.createElement("pre", null, 
+                                React.createElement("code", {className: "language-html"}, this.state.sampleAttackOutput)
+                            )
+                        )
+                    )
+
+                )
+            )
         );
     }
 });
@@ -27,11 +63,22 @@ var Demo = React.createClass({displayName: "Demo",
     },
     render: function() {
         return (
-            React.createElement("div", null, 
-                React.createElement("form", {onSubmit: this.handleSubmit}, 
-                    React.createElement("textarea", {ref: "code"}, this.props.code), 
-                    React.createElement("input", {type: "submit", value: "Post"}), 
-                    React.createElement("textarea", {ref: "escaped"}, this.props.escaped)
+            React.createElement("div", {className: "panel panel-default"}, 
+                React.createElement("div", {className: "panel-heading"}, React.createElement("h3", {className: "panel-title"}, "Code")), 
+                React.createElement("div", {className: "panel-body"}, 
+                    React.createElement("form", {className: "form-horizontal", onSubmit: this.handleSubmit}, 
+                        React.createElement("div", {className: "form-group"}, 
+                            React.createElement("label", {for: "code", className: "col-sm-2 control-label"}, "Input"), 
+                            React.createElement("textarea", {id: "code", className: "form-control", rows: "6", ref: "code"}, this.props.code)
+                        ), 
+                        React.createElement("div", {className: "form-group"}, 
+                            React.createElement("input", {className: "btn btn-default", type: "submit", value: "Post"})
+                        ), 
+                        React.createElement("div", {className: "form-group"}, 
+                            React.createElement("label", {for: "escaped", className: "col-sm-2 control-label"}, "Result"), 
+                            React.createElement("textarea", {id: "escaped", className: "form-control", rows: "6", disabled: true, ref: "escaped"}, this.props.escaped)
+                        )
+                    )
                 )
             )
         );

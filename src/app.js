@@ -1,10 +1,46 @@
 var Index = React.createClass({
     getInitialState: function() {
-        return {};
+        return {
+            "sample": "$stauros = new Stauros\\Stauros;\r\n$clean = $stauros->scanHTML($dirty);",
+            "sampleAttack": "<img src=\"javascript:alert('XSS');\">",
+            "sampleAttackOutput": "<img>"
+        };
     },
     render: function() {
         return (
-            <div>Stauros!</div>
+            <div className="panel panel-default">
+                <div className="panel-body">
+                    <h1>Stauros - A fast XSS sanitizer for PHP</h1>
+                    <div className="panel panel-danger">
+                        <div className="panel-heading"><h3 className="panel-title">Warning</h3></div>
+                        <div className="panel-body">
+                            <h4>Stauros is currently an experimental library. It is not recommended for production use.</h4>
+                        </div>
+                    </div>
+                    <div className="panel panel-default">
+                        <div className="panel-heading"><h4>Usage:</h4></div>
+                        <div className="panel-body">
+                            <pre>
+                                <code className="language-php">{this.state.sample}</code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div className="panel panel-default">
+                        <div className="panel-heading"><h4>An Example Of Bad Input:</h4></div>
+                        <div className="panel-body">
+                            <h5>Original Input</h5>
+                            <pre>
+                                <code className="language-html">{this.state.sampleAttack}</code>
+                            </pre>
+                            <h5>Cleaned Output</h5>
+                            <pre>
+                                <code className="language-html">{this.state.sampleAttackOutput}</code>
+                            </pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         );
     }
 });
@@ -27,12 +63,23 @@ var Demo = React.createClass({
     },
     render: function() {
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <textarea ref="code">{this.props.code}</textarea>
-                    <input type="submit" value="Post" />
-                    <textarea ref="escaped">{this.props.escaped}</textarea>
-                </form>
+            <div className="panel panel-default">
+                <div className="panel-heading"><h3 className="panel-title">Code</h3></div>
+                <div className="panel-body">
+                    <form className="form-horizontal" onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                            <label for="code" className="col-sm-2 control-label">Input</label>
+                            <textarea id="code" className="form-control" rows="6" ref="code">{this.props.code}</textarea>
+                        </div>
+                        <div className="form-group">
+                            <input className="btn btn-default" type="submit" value="Post" />
+                        </div>
+                        <div className="form-group">
+                            <label for="escaped" className="col-sm-2 control-label">Result</label>
+                            <textarea id="escaped" className="form-control" rows="6" disabled ref="escaped">{this.props.escaped}</textarea>
+                        </div>
+                    </form>
+                </div>
             </div>
         );
     }
