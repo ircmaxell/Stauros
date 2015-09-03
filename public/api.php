@@ -5,7 +5,6 @@ require __DIR__ . "/../vendor/autoload.php";
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('POST', '/code/new', 'create');
     $r->addRoute('GET', '/code/{id:.+}', 'fetch');
-    $r->addRoute('GET', '/code-demo/', 'demo');
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];

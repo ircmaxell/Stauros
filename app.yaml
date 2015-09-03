@@ -22,6 +22,3 @@ handlers:
 
 - url: /code/(.+)
   script: public/api.php
-
-- url: /code-demo/
-  script: public/api.php

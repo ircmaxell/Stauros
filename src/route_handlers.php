@@ -32,14 +32,3 @@ function create() {
     header("Content-Type: application/json");
     echo json_encode($entity);
 }
-
-
-
-function demo() {
-    $injector = getInjector();
-    $mapper = $injector->make('StaurosWeb\DataMapper');
-
-    $entity = StaurosWeb\Entity::create("<a>");
-    $mapper->create($entity);
-    var_dump($entity);
-}

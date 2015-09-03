@@ -107,7 +107,7 @@ var App = (function(Index, Demo) {
             if (!data) {
                 // fetch the data
                 jQuery.get("/code/" + parts[1]).done(function(data) {
-                    history.replaceState(data, "Code " + data.publicId, "/code/" + parts[1]);
+                    history.replaceState(data, "Code " + data.publicId, "/demo/" + parts[1]);
                     currentComponent = React.render(<Demo {...data} />, content);
                 });
                 return;
