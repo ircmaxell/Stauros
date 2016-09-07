@@ -1,6 +1,8 @@
 Stauros
 =======
 
+[![Build Status](https://travis-ci.org/ircmaxell/Stauros.svg?branch=master)](https://travis-ci.org/ircmaxell/Stauros)
+
 A fast XSS sanitation library for PHP.
 
 ##IMPORTANT
