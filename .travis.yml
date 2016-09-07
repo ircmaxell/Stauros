@@ -1,0 +1,9 @@
+language: php
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --prefer-source
+
+script:
+  - make lint
+  - make test

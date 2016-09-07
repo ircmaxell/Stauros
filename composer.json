@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-        "php-64bit": ">=5.5",
-        "ezyang/htmlpurifier": "dev-master"
+        "php-64bit": ">=5.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.7",
-        "fabpot/php-cs-fixer": "1.*"
+        "friendsofphp/php-cs-fixer": "1.*",
+        "ezyang/htmlpurifier": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload": {
