@@ -9,6 +9,8 @@
 
 namespace Stauros\HTML;
 
+use Stauros\Stauros;
+
 class ScannerTest extends \PHPUnit_Framework_TestCase {
     
     public static function provideVectors() {
@@ -97,5 +99,52 @@ class ScannerTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals(1, $called);
         $this->assertEquals("<a>blah</a>", $output);
+    }
+
+    public function testScanHTML()
+    {
+
+        $testArray = array(
+            // script is escaped, is it safe?
+            'http://vulnerable.info/poc/poc.php?foo=%3Csvg%3E%3Cscript%3E/%3C1/%3Ealert(document.domain)%3C/script%3E%3C/svg%3E' => 'http://vulnerable.info/poc/poc.php?foo=%3Csvg%3E%3Cscript%3E/%3C1/%3Ealert(document.domain)%3C/script%3E%3C/svg%3E',
+
+            // Google XSS in IE | 2015: http://blog.bentkowski.info/2015/04/xss-via-host-header-cse.html
+            'Location: https://www.google.com%3a443%2fcse%2ftools%2fcreate_onthefly%3b%3c%2ftextarea%3e%3csvg%2fonload%3dalert%28document%2edomain%29%3e%3b%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f' => 'Location: https://www.google.com%3a443%2fcse%2ftools%2fcreate_onthefly%3b%3c%2ftextarea%3e%3csvg%2fonload%3dalert%28document%2edomain%29%3e%3b%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f',
+
+            // script is escaped, is it safe? | IE11 in IE8 docmode #mxss | https://twitter.com/0x6D6172696F/status/626379000181596160
+            'with(document)body.appendChild(createElement(\'iframe onload=&#97&#108&#101&#114&#116(1)>\')),body.innerHTML+=\'\'' => 'with(document)body.appendChild(createElement(\'iframe onload=&#97&#108&#101&#114&#116(1)&gt;\')),body.innerHTML+=\'\'',
+
+            // XSS to attack "pfSense" - https://www.htbridge.com/advisory/HTB23251
+            'https://[host]/diag_logs_filter.phpfilterlogentries_submit=1&filterlogentries_qty=%27%22%3E%3Cscript%3Ealert%28%27ImmuniWeb%27%29;%3C/script%3E' => "https://[host]/diag_logs_filter.phpfilterlogentries_submit=1&filterlogentries_qty=%27%22%3E%3Cscript%3Ealert%28%27ImmuniWeb%27%29;%3C/script%3E",
+
+            // show a alert with FF 2015-09 | is it safe??
+            '(_=alert,_(1337))' => '(_=alert,_(1337))',
+
+            // script is escaped, is it safe?
+            "http://www.amazon.com/s/ref=amb_link_7189562_72/002-2069697-5560831?ie =UTF8&amp;node=&quot;/&gt;&lt;script&gt;alert('XSS');&lt;/script&gt;&a mp;pct-off=25-&amp;hidden-keywords=athletic|outdoor&amp;pf_rd_m=ATVPDK IKX0DER&amp;pf_rd_s=center-5&amp;pf_r" => "http://www.amazon.com/s/ref=amb_link_7189562_72/002-2069697-5560831?ie =UTF8&amp;node=&quot;/&gt;&lt;script&gt;alert('XSS');&lt;/script&gt;&a mp;pct-off=25-&amp;hidden-keywords=athletic|outdoor&amp;pf_rd_m=ATVPDK IKX0DER&amp;pf_rd_s=center-5&amp;pf_r",
+
+            // script is escaped, is it safe?
+            'http://www.amazon.com/s/ref=amb_link_7581132_5/102-9803838-3100108?ie= UTF8&amp;node=&quot;/&gt;&lt;script&gt;alert(&quot;XSS&quot;);&lt;/scr ipt&gt;&amp;keywords=Lips&amp;emi=A19ZEOAOKUUP0Q&amp;pf_rd_m=ATVPDKIKX 0DER&amp;pf_rd_s=left-1&amp;pf_rd_r=1JMP7' => 'http://www.amazon.com/s/ref=amb_link_7581132_5/102-9803838-3100108?ie= UTF8&amp;node=&quot;/&gt;&lt;script&gt;alert(&quot;XSS&quot;);&lt;/scr ipt&gt;&amp;keywords=Lips&amp;emi=A19ZEOAOKUUP0Q&amp;pf_rd_m=ATVPDKIKX 0DER&amp;pf_rd_s=left-1&amp;pf_rd_r=1JMP7',
+
+            // no style-tag, is it safe?
+            '<style>p[foo=bar{}*{-o-link:\'javascript:alert(1)\'}{}*{-o-link-source:current}*{background:red}]{background:green};</style>' => 'p[foo=bar{}*{-o-link:\'javascript:alert(1)\'}{}*{-o-link-source:current}*{background:red}]{background:green};',
+
+            // no style-tag, is it safe?
+            "<STYLE>li {list-style-image: url(\"javascript:alert('XSS')\");}</STYLE></br>" => 'li {list-style-image: url("javascript:alert(\'XSS\')");}',
+
+            // no style-tag, is it safe?
+            '<STYLE>BODY{-moz-binding:url("http://ha.ckers.org/xssmoz.xml#xss")}</STYLE>' => 'BODY{-moz-binding:url("http://ha.ckers.org/xssmoz.xml#xss")}',
+
+            // no style-tag, is it safe?
+            '<STYLE>.XSS{background-image:url("javascript:alert(\'XSS\')");}</STYLE><A CLASS=XSS></A>' => '.XSS{background-image:url("javascript:alert(\'XSS\')");}<A></A>',
+
+            // JS in ActionScript, safe?
+            'getURL("javascript:alert(\'XSS\')")' => 'getURL("javascript:alert(\'XSS\')")',
+    );
+
+        $stauros = new Stauros;
+        foreach ($testArray as $before => $after) {
+            self::assertEquals($after, $stauros->scanHTML($before), 'testing: ' . $before);
+        }
     }
 }
