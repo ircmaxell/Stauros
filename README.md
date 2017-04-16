@@ -5,7 +5,7 @@ Stauros
 
 A fast XSS sanitation library for PHP.
 
-##IMPORTANT
+## IMPORTANT
 
 # **THIS IS AN EXPERIMENTAL LIBRARY, USE AT YOUR OWN RISK**
 
